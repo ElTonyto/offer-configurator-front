@@ -1,9 +1,5 @@
 import axios from "./axios"
 
-// Auth
-export const login = (email : string, password: string) => axios.post("auth/login", { email, password })
-export const register = (firstName : string, lastName: string, email: string, password: string) => axios.post("auth/register", { firstName, lastName, email, password })
-
 // Catalogs
 export const allCatalogs = () => axios.get("catalogs")
 export const oneCatalog = (id: string) => axios.get(`catalogs/${id}`)
@@ -13,9 +9,9 @@ export const updateCatalog = (id: string, name: string) => axios.put(`catalogs/$
 
 // Offers
 export const allOffers = () => axios.get("offers")
-export const oneOffers = (id: string) => axios.get(`offers/${id}`)
-export const deleteOffers = (id: string) => axios.delete(`offers/${id}`)
-export const insertOffers = (productId: string, price: string, submittedBy: string, isActive: boolean, startAt: Date, endAt: Date) => axios.post("offers", {
+export const oneOffer = (id: string) => axios.get(`offers/${id}`)
+export const deleteOffer = (id: string) => axios.delete(`offers/${id}`)
+export const insertOffer = (productId: string, price: string, submittedBy: string, isActive: boolean, startAt: Date, endAt: Date) => axios.post("offers", {
     productId,
     price,
     submittedBy,
@@ -23,7 +19,7 @@ export const insertOffers = (productId: string, price: string, submittedBy: stri
     startAt,
     endAt
 })
-export const updateOffers = (id: string, productId: string, price: string, submittedBy: string, isActive: boolean, startAt: Date, endAt: Date) => axios.put(`offers/${id}`, {
+export const updateOffer = (id: string, productId: string, price: string, submittedBy: string, isActive: boolean, startAt: Date, endAt: Date) => axios.put(`offers/${id}`, {
     productId,
     price,
     submittedBy,
@@ -34,9 +30,9 @@ export const updateOffers = (id: string, productId: string, price: string, submi
 
 // Products
 export const allProducts = () => axios.get("products")
-export const oneProducts = (id: string) => axios.get(`products/${id}`)
-export const deleteProducts = (id: string) => axios.delete(`products/${id}`)
-export const insertProducts = (name: string, parentId: string, description: string, catalogId: string, price: string, brand: string, remainingStock: number, options: Array<Object>, allOptions: Array<Object>) => axios.post("products", {
+export const oneProduct = (id: string) => axios.get(`products/${id}`)
+export const deleteProduct = (id: string) => axios.delete(`products/${id}`)
+export const insertProduct = (name: string, parentId: string, description: string, catalogId: string, price: string, brand: string, remainingStock: number, options: Array<Object>, allOptions: Array<Object>) => axios.post("products", {
   name,
   parentId,
   description,
@@ -47,7 +43,7 @@ export const insertProducts = (name: string, parentId: string, description: stri
   options,
   allOptions
 })
-export const updateProducts = (id: string, name: string, parentId: string, description: string, catalogId: string, price: string, brand: string, remainingStock: number, options: Array<Object>, allOptions: Array<Object>) => axios.put(`products/${id}`, {
+export const updateProduct = (id: string, name: string, parentId: string, description: string, catalogId: string, price: string, brand: string, remainingStock: number, options: Array<Object>, allOptions: Array<Object>) => axios.put(`products/${id}`, {
     name,
     parentId,
     description,
@@ -58,9 +54,3 @@ export const updateProducts = (id: string, name: string, parentId: string, descr
     options,
     allOptions
 })
-
-// Users
-export const allUsers = () => axios.get("users")
-export const oneUsers = (id: string) => axios.get(`users/${id}`)
-export const deleteUsers = (id: string) => axios.delete(`users/${id}`)
-export const updateUsers = (id: string, firstName : string, lastName: string, email: string, password: string) => axios.put(`users/${id}`, { firstName,  lastName, email,  password })
