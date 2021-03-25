@@ -1,7 +1,7 @@
 import React from 'react'
 import { BrowserRouter } from 'react-router-dom'
-import Routes from '../routes/Routes';
-import Header from './header/Header';
+import Routes from '../routes/Routes'
+import Header from './header/Header'
 
 const App: React.FC = () => (
     <BrowserRouter>
