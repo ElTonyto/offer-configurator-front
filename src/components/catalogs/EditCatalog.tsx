@@ -48,7 +48,7 @@ const EditCatalog: React.FC<PropsType> = ({ match }) => {
             })
         } else {
             updateCatalog(id, name)
-            .then(() => notification("Le catalogue existe déjà", "error"))
+            .then(() => notification("Catalogue enregistré", "success"))
             .catch(err => {
                 if (err.data.type === "CONFLICT") {
                     notification("Le catalogue existe déjà", "error")
