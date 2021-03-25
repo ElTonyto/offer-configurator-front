@@ -1,0 +1,4 @@
+- Component Navbar avec 
+    - nom de l'application
+    - un lien pour chaque route (Offre, Produit, Catalog)
+    - un btn de déconnexion

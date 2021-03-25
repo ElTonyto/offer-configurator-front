@@ -1,0 +1,13 @@
+- Component pour ajouter un catalog
+    - route: /catalogs/add
+    - Formulaire
+
+- Component pour editer un catalog
+    - route: /catalogs/id
+    - Formulaire
+    - Btn supprimer un catalog
+    
+- Component pour récupérer tous les catalogs
+    - route: /catalogs
+    - Tableau
+    - Btn supprimer un catalog
