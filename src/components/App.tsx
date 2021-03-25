@@ -6,7 +6,9 @@ import Header from './header/Header';
 const App: React.FC = () => (
     <BrowserRouter>
         <Header />
-        <Routes />
+        <div className="container sm:w-7/12 px-3 sm:px-0 container-padding">
+            <Routes />
+        </div>
     </BrowserRouter>
 )
 
