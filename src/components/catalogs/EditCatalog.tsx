@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import FormInput from "../../utils/input/FormInput"
-import { oneCatalog } from '../../api/ApiRequest'
+import { oneCatalog, updateCatalog, insertCatalog } from '../../api/ApiRequest'
 import { notification } from '../../utils/notifications/Notifications'
-import { Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom'
+import { capitalize } from '../../utils/Utils'
 
 type PropsType = {
     match: any
@@ -16,16 +17,10 @@ const EditCatalog: React.FC<PropsType> = ({ match }) => {
 
     useEffect(() => {
         if (id !== undefined) {
-            oneCatalog(id).then(res => {
-                if (res.data.status === "success") {
-                    setValue("name", res.data.data.name)
-                } else {
-                    setRedirect(true)
-                    notification("Le catalogue est introuvable", "error")
-                }
-            }).catch(err => {
+            oneCatalog(id).then(res => setValue("name", res.data.data.name))
+            .catch(() => {
                 setRedirect(true)
-                notification("Une erreur est survenue", "error")
+                notification("Le catalogue est introuvable", "error")
             })
         }
     }, [id, setValue])
@@ -37,7 +32,31 @@ const EditCatalog: React.FC<PropsType> = ({ match }) => {
     }
 
     const sendForm = (data: any) => {
-
+        const name = capitalize(data.name)
+        if (id === undefined) {
+            insertCatalog(name)
+            .then(() => {
+                setValue("name", "")
+                notification("Le catalogue a bien été ajouté", "success")
+            })
+            .catch(err => {
+                if (err.data.type === "CONFLICT") {
+                    notification("Le catalogue existe déjà", "error")
+                } else {
+                    notification("Une erreur est survenue", "error")
+                }
+            })
+        } else {
+            updateCatalog(id, name)
+            .then(() => notification("Le catalogue existe déjà", "error"))
+            .catch(err => {
+                if (err.data.type === "CONFLICT") {
+                    notification("Le catalogue existe déjà", "error")
+                } else {
+                    notification("Une erreur est survenue", "error")
+                }
+            })
+        }
     }
   
     return (

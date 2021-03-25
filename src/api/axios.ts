@@ -38,7 +38,7 @@ axios.interceptors.response.use(
             console.info("⬅️️ Response ✅", response)
         }
 
-        if (response.data.status !== "success") throw response.data.message
+        if (response.data.status !== "Success") throw response.data.message
 
         return response
     },
