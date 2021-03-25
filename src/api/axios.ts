@@ -1,8 +1,7 @@
 import axios from "axios"
-import { userHeader, userLogout } from "./auth"
 
 const DEBUG = true
-const HEADER_ID = "X-HEADER-ID"
+const HEADER_ROLE = "X-ROLE"
 
 axios.defaults.baseURL = "http://localhost:8080/"
 axios.defaults.headers.common["Content-Type"] = "application/json"
@@ -16,7 +15,7 @@ axios.defaults.headers.common.Accept = "application/json"
 axios.interceptors.request.use(
     config => {
         /** In dev, intercepts request and logs it into console for dev */
-        config.headers[HEADER_ID] = userHeader()
+        config.headers[HEADER_ROLE] = "configuration-offer"
 
         if (DEBUG) {
             console.info("➡️ Request ✅", config)
@@ -37,10 +36,6 @@ axios.interceptors.response.use(
     response => {
         if (DEBUG) {
             console.info("⬅️️ Response ✅", response)
-        }
-
-        if (response.data.message === "invalid_credentials") {
-            userLogout()
         }
 
         if (response.data.status !== "success") throw response.data.message
