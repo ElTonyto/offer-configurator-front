@@ -7,6 +7,7 @@ import Datalist from "../../utils/input/Datalist"
 import FormInput from "../../utils/input/FormInput"
 import { notification } from "../../utils/notifications/Notifications"
 import Option from "./Option"
+import SelectOption from './SelectOption'
 
 type PropsType = {
     match: any
@@ -17,6 +18,7 @@ const EditProduct: React.FC<PropsType> = ({ match }) => {
     const [isParent, setIsParent] = useState<boolean>(true)
     const [redirect, setRedirect] = useState<boolean>(false)
     const [products, setProducts] = useState<Array<any>>([])
+    const [selectedProduct, setSelectedProduct] = useState<any>(null)
     const [categories, setCategories] = useState<Array<any>>([])
     const { register, handleSubmit, clearErrors, watch, getValues, setValue, control, errors, reset } = useForm({
         defaultValues: {
@@ -106,6 +108,55 @@ const EditProduct: React.FC<PropsType> = ({ match }) => {
         }
     }, [isParent])
 
+    const handleSelectedProduct = (e: any) => {
+        if (e.target.value.length > 0) {
+            oneProduct(e.target.value)
+            .then(res => {
+                if (res.data.data.length === 0) {
+                    setSelectedProduct(null)
+                } else {
+                    setSelectedProduct(res.data.data)
+                }
+            })
+            .catch(err => {
+                setSelectedProduct(null)
+            })
+        } else {
+            setSelectedProduct(null)
+        }
+    }
+
+    useEffect(() => {
+        if (selectedProduct !== null) {
+            if (selectedProduct.allOptions !== null) {
+                selectedProduct.allOptions.forEach((item: any, index: number) => {
+                    setValue(`allOptions[${index}].name`, item.name)
+                    setValue(`allOptions[${index}].option`, item.option)
+                })
+            }
+            if (selectedProduct.options !== null) {
+                selectedProduct.options.forEach((item: any, index: number) => {
+                    setValue(`allOptions[${index}].name`, item.name)
+                    setValue(`allOptions[${index}].option`, item.option)
+                })
+            }
+            setValue("name", selectedProduct.name)
+            setValue("description", selectedProduct.description)
+            setValue("catalogId", selectedProduct.catalogId)
+            setValue("price", selectedProduct.price)
+            setValue("brand", selectedProduct.brand)
+            setValue("remainingStock", selectedProduct.remainingStock)
+        } else {
+            setValue("allOptions", [{ name: "", option: "" }])
+            setValue("name", "")
+            setValue("description", "")
+            setValue("catalogId","")
+            setValue("price", "")
+            setValue("brand", "")
+            setValue("remainingStock", "")
+        }
+    }, [selectedProduct])
+
     if (redirect) {
         return (
             <Redirect to={{ pathname: "/" }} />
@@ -119,8 +170,8 @@ const EditProduct: React.FC<PropsType> = ({ match }) => {
             data.options = null
             delete data.isParent
         } else {
-            data.options = data.allOptions
-            delete data.allOptions
+            data.allOptions = null
+            data.catalogId = selectedProduct.catalogId
             delete data.isParent
         }
         if (id === undefined) {
@@ -156,7 +207,10 @@ const EditProduct: React.FC<PropsType> = ({ match }) => {
             })
         } else {
             updateProduct(id, data)
-            .then(() => notification("Le produit a bien été enregistré", "success"))
+            .then(() => {
+                setSelectedProduct(null)
+                notification("Le produit a bien été enregistré", "success")
+            })
             .catch((err) => {
                 if (err.data.message === "Catalog not found") {
                     notification("Le catalogue est introuvable", "error")
@@ -183,26 +237,12 @@ const EditProduct: React.FC<PropsType> = ({ match }) => {
                     label="Parent"
                     name="isParent"
                     checked={true}
-                    onChange={() => setIsParent(!isParent)}
+                    onChange={() => {setIsParent(!isParent); setSelectedProduct(null)}}
                     register={register}
                     rules={{ required: false }}
                     error={""}
                 />
             </div>
-
-            {/* Product Name */}
-            <FormInput
-                classNameContainer="w-full mt-2"
-                className="w-full bg-white my-0.5 p-2 text-base border border-gray-300 rounded-md font-medium outline-none"
-                label="Nom du produit"
-                type="text"
-                name="name"
-                value=""
-                placeholder="Ex: Meuble en bois - Bleu"
-                register={register}
-                rules={{ required: true }}
-                error={errors.name}
-            />
 
             {/* Parent  */}
             {!isParent ? (
@@ -210,108 +250,141 @@ const EditProduct: React.FC<PropsType> = ({ match }) => {
                     data={products}
                     classNameContainer="w-full mt-2"
                     className="w-full bg-white my-0.5 p-2 text-base border border-gray-300 rounded-md font-medium outline-none"
-                    label="Id du produit parent"
+                    label="Produit parent"
                     listName="products"
                     name="parentId"
                     value=""
+                    onChange={(e: any) => handleSelectedProduct(e)}
                     register={register}
                     rules={{ required: true }}
                     error={errors.parentId}
                 />
             ) : null }
 
-            {/* Description */}
-            <div className="w-full mt-2">
-                <label>Description</label>
-                <textarea
-                    className="w-full bg-white my-0.5 p-2 text-base border border-gray-300 rounded-md font-medium outline-none"
-                    name="description"
-                    defaultValue=""
-                    placeholder=""
-                    ref={register({ required: true })}
-                    style={{ borderColor: errors.description && "#f02849" }}
-                />
-            </div>
+            {(!isParent && selectedProduct !== null) || (isParent && selectedProduct == null) ? (
+                <div>
+                    {/* Product Name */}
+                    <FormInput
+                        classNameContainer="w-full mt-2"
+                        className="w-full bg-white my-0.5 p-2 text-base border border-gray-300 rounded-md font-medium outline-none"
+                        label="Nom du produit"
+                        type="text"
+                        name="name"
+                        value=""
+                        placeholder="Ex: Meuble en bois - Bleu"
+                        register={register}
+                        rules={{ required: true }}
+                        error={errors.name}
+                    />
 
-            {/* Category */}
-            {isParent ? (
-                <Datalist
-                    data={categories}
-                    classNameContainer="w-full mt-2"
-                    className="w-full bg-white my-0.5 p-2 text-base border border-gray-300 rounded-md font-medium outline-none"
-                    label="Id du catalogue"
-                    listName="categories"
-                    name="catalogId"
-                    value=""
-                    register={register}
-                    rules={{ required: true }}
-                    error={errors.catalogId}
-                />
+                    {/* Description */}
+                    <div className="w-full mt-2">
+                        <label>Description</label>
+                        <textarea
+                            className="w-full bg-white my-0.5 p-2 text-base border border-gray-300 rounded-md font-medium outline-none"
+                            name="description"
+                            defaultValue=""
+                            placeholder=""
+                            ref={register({ required: true })}
+                            style={{ borderColor: errors.description && "#f02849" }}
+                        />
+                    </div>
+
+                    {/* Category */}
+                    {isParent ? (
+                        <Datalist
+                            data={categories}
+                            classNameContainer="w-full mt-2"
+                            className="w-full bg-white my-0.5 p-2 text-base border border-gray-300 rounded-md font-medium outline-none"
+                            label="Catalogue"
+                            listName="catalog"
+                            name="catalogId"
+                            value=""
+                            register={register}
+                            rules={{ required: true }}
+                            error={errors.catalogId}
+                        />
+                    ) : null }
+
+                    {/* Brand */}
+                    {isParent ? (
+                        <FormInput
+                            classNameContainer="w-full mt-2"
+                            className="w-full bg-white my-0.5 p-2 text-base border border-gray-300 rounded-md font-medium outline-none"
+                            label="Marque"
+                            type="text"
+                            name="brand"
+                            value=""
+                            placeholder="Ex: Ikéa"
+                            register={register}
+                            rules={{ required: true }}
+                            error={errors.brand}
+                        />
+                    ) : null }
+
+                    {/* Price */}
+                    <FormInput
+                        classNameContainer="w-full mt-2"
+                        className="w-full bg-white my-0.5 p-2 text-base border border-gray-300 rounded-md font-medium outline-none"
+                        label="Prix €"
+                        type="number"
+                        name="price"
+                        value=""
+                        placeholder="Ex: 12"
+                        register={register}
+                        min={"0"}
+                        rules={{ required: true }}
+                        error={errors.price}
+                    />
+
+                    {/* Stock */}
+                    <FormInput
+                        classNameContainer="w-full mt-2"
+                        className="w-full bg-white my-0.5 p-2 text-base border border-gray-300 rounded-md font-medium outline-none"
+                        label="Stock"
+                        type="number"
+                        name="remainingStock"
+                        value=""
+                        placeholder="Ex: 25000"
+                        register={register}
+                        min={"0"}
+                        step={"1"}
+                        rules={{ required: true }}
+                        error={errors.remainingStock}
+                    />
+
+                    <p className="mt-2">Options</p>
+                    {fields.map((item, index) => {
+                        if (isParent) {
+                            return (
+                                <Option key={`${item.id}`} index={index} size={fields.length} register={register} errors={errors} remove={remove}/>
+                            )
+                        }
+                        if (selectedProduct.allOptions !== null) {
+                            return (
+                                <SelectOption 
+                                    key={`${item.id}`} 
+                                    item={selectedProduct.allOptions} 
+                                    index={index} 
+                                    register={register} 
+                                    errors={errors}
+                                />
+                            )
+                        }
+                    })}
+
+                    {isParent ? (
+                        <div onClick={() => append({
+                            name: "",
+                            option: "",
+                            })} 
+                            className="bg-blue-500 text-white text-center font-medium px-4 py-2 mb-3 shadow-md rounded-md w-full sm:bg-white  sm:text-left sm:px-0 sm:py-0 sm:mb-0 sm:shadow-none sm:ml-1 sm:text-blue-500 cursor-pointer"
+                        >
+                            <p>Ajouter une option</p>
+                        </div>
+                    ) : null }
+                </div>
             ) : null }
-
-            {/* Brand */}
-            {isParent ? (
-                <FormInput
-                    classNameContainer="w-full mt-2"
-                    className="w-full bg-white my-0.5 p-2 text-base border border-gray-300 rounded-md font-medium outline-none"
-                    label="Marque"
-                    type="text"
-                    name="brand"
-                    value=""
-                    placeholder="Ex: Ikéa"
-                    register={register}
-                    rules={{ required: true }}
-                    error={errors.brand}
-                />
-            ) : null }
-
-            {/* Price */}
-            <FormInput
-                classNameContainer="w-full mt-2"
-                className="w-full bg-white my-0.5 p-2 text-base border border-gray-300 rounded-md font-medium outline-none"
-                label="Prix €"
-                type="number"
-                name="price"
-                value=""
-                placeholder="Ex: 12"
-                register={register}
-                min={"0"}
-                rules={{ required: true }}
-                error={errors.price}
-            />
-
-            {/* Stock */}
-            <FormInput
-                classNameContainer="w-full mt-2"
-                className="w-full bg-white my-0.5 p-2 text-base border border-gray-300 rounded-md font-medium outline-none"
-                label="Stock"
-                type="number"
-                name="remainingStock"
-                value=""
-                placeholder="Ex: 25000"
-                register={register}
-                min={"0"}
-                step={"1"}
-                rules={{ required: true }}
-                error={errors.remainingStock}
-            />
-
-            <p className="mt-2">Options</p>
-            {fields.map((item, index) => {
-                return (
-                    <Option key={`${item.id}`} index={index} size={fields.length} register={register} errors={errors} remove={remove}/>
-                )
-            })}
-
-            <div onClick={() => append({
-                name: "",
-                option: "",
-                })} 
-                className="bg-blue-500 text-white text-center font-medium px-4 py-2 mb-3 shadow-md rounded-md w-full sm:bg-white  sm:text-left sm:px-0 sm:py-0 sm:mb-0 sm:shadow-none sm:ml-1 sm:text-blue-500 cursor-pointer"
-            >
-                <p>Ajouter une option</p>
-            </div>
-
 
             <div className="flex justify-center my-3">
                 <button type="submit" className="bg-blue-500 text-white shadow-md font-medium px-4 py-2 rounded-md w-full md:w-2/12">
