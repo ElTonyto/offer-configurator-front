@@ -32,25 +32,5 @@ export const updateOffer = (id: string, productId: string, price: string, submit
 export const allProducts = () => axios.get("products")
 export const oneProduct = (id: string) => axios.get(`products/${id}`)
 export const deleteProduct = (id: string) => axios.delete(`products/${id}`)
-export const insertProduct = (name: string, parentId: string, description: string, catalogId: string, price: string, brand: string, remainingStock: number, options: Array<Object>, allOptions: Array<Object>) => axios.post("products", {
-  name,
-  parentId,
-  description,
-  catalogId,
-  price,
-  brand,
-  remainingStock,
-  options,
-  allOptions
-})
-export const updateProduct = (id: string, name: string, parentId: string, description: string, catalogId: string, price: string, brand: string, remainingStock: number, options: Array<Object>, allOptions: Array<Object>) => axios.put(`products/${id}`, {
-    name,
-    parentId,
-    description,
-    catalogId,
-    price,
-    brand,
-    remainingStock,
-    options,
-    allOptions
-})
+export const insertProduct = (data: { name: string, parentId: string, description: string, catalogId: string, price: string, brand: string, remainingStock: number, options: Array<Object>, allOptions: Array<Object> }) => axios.post("products", data)
+export const updateProduct = (id: string, data: { name: string, parentId: string, description: string, catalogId: string, price: string, brand: string, remainingStock: number, options: Array<Object>, allOptions: Array<Object> }) => axios.put(`products/${id}`, data)

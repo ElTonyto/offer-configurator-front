@@ -1,5 +1,5 @@
 import React from 'react'
-import { UseFormMethods, RegisterOptions } from 'react-hook-form'
+import { UseFormMethods, RegisterOptions, FieldError } from 'react-hook-form'
 
 interface PropsType extends Partial<Pick<UseFormMethods, "register" | "errors">> {
     id?: string,
@@ -13,7 +13,7 @@ interface PropsType extends Partial<Pick<UseFormMethods, "register" | "errors">>
     step?: string,
     min?: string,
     placeholder?: string,
-    error?: string,
+    error?: string | FieldError,
     disable?: boolean,
     autoFocus?: boolean,
     rules?: RegisterOptions,
