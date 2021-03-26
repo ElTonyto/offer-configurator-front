@@ -83,6 +83,13 @@ const EditProduct: React.FC<PropsType> = ({ match }) => {
                             setValue(`allOptions[${index}].option`, item.option)
                         })
                     }
+                    if (res.data.data.parentId !== null) {
+                        setIsParent(false)
+                        setSelectedProduct(res.data.data)
+                    } else {
+                        setIsParent(true)
+                        setSelectedProduct(null)
+                    }
                 } else {
                     setRedirect(true)
                     notification("Le produit est introuvable", "error")
@@ -141,6 +148,7 @@ const EditProduct: React.FC<PropsType> = ({ match }) => {
                 })
             }
             setValue("name", selectedProduct.name)
+            setValue("parentId", selectedProduct.parentId)
             setValue("description", selectedProduct.description)
             setValue("catalogId", selectedProduct.catalogId)
             setValue("price", selectedProduct.price)
@@ -236,7 +244,7 @@ const EditProduct: React.FC<PropsType> = ({ match }) => {
                 <CheckBox
                     label="Parent"
                     name="isParent"
-                    checked={true}
+                    checked={isParent}
                     onChange={() => {setIsParent(!isParent); setSelectedProduct(null)}}
                     register={register}
                     rules={{ required: false }}
