@@ -38,11 +38,9 @@ const EditOffer: React.FC<PropsType> = ({ match }) => {
                     setValue("isActive", res.data.data.isActive)
                 } else {
                     setRedirect(true)
-                    notification("L'offre est introuvable", "error")
                 }
             }).catch(err => {
                 setRedirect(true)
-                notification("Une erreur est survenue", "error")
             })
         } else {
             allChildProducts()
@@ -72,7 +70,7 @@ const EditOffer: React.FC<PropsType> = ({ match }) => {
 
     if (redirect) {
         return (
-            <Redirect to={{ pathname: "/" }} />
+            <Redirect to={{ pathname: "/not-found" }} />
         )
     }
 

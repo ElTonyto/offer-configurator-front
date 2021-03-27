@@ -1,5 +1,0 @@
-- Component de la page d'accueil
-    - route: /
-    - (A voir ce qu'on met ici)
-        - On pourrait mettre pour chaque type (sauf user),
-        une liste des 3 dernières actions (Création / Mise à jour/ Suppression) ?

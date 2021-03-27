@@ -1,8 +1,6 @@
 import React from "react"
 import { Route, Switch, Redirect } from "react-router-dom"
 
-import Home from "../components/home/Home"
-
 import Catalogs from "../components/catalogs/Catalogs"
 import EditCatalog from "../components/catalogs/EditCatalog"
 
@@ -11,6 +9,8 @@ import EditOffer from "../components/offers/EditOffer"
 
 import Products from "../components/products/Products"
 import EditProduct from "../components/products/EditProduct"
+
+import NotFound from "../components/errors/NotFound"
 
 
 const Routes: React.FC = () => (
@@ -27,9 +27,11 @@ const Routes: React.FC = () => (
         <Route exact path="/catalogs" component={Catalogs} />
         <Route exact path="/offers" component={Offers} />
         <Route exact path="/products" component={Products} />
-
-        <Route exact path="/" component={Home} />
-        <Redirect to="/" />
+        
+        <Route exact path="/not-found" component={NotFound} />
+        
+        <Redirect exact from="/" to="/offers" /> 
+        <Redirect to="/not-found" />
     </Switch>
 )
 

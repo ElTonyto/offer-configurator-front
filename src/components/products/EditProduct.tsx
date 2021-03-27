@@ -104,11 +104,9 @@ const EditProduct: React.FC<PropsType> = ({ match }) => {
                     }
                 } else {
                     setRedirect(true)
-                    notification("Le produit est introuvable", "error")
                 }
             }).catch(err => {
                 setRedirect(true)
-                notification("Une erreur est survenue", "error")
             })
         }
     }, [id, setValue, append])
@@ -191,7 +189,7 @@ const EditProduct: React.FC<PropsType> = ({ match }) => {
 
     if (redirect) {
         return (
-            <Redirect to={{ pathname: "/" }} />
+            <Redirect to={{ pathname: "/not-found" }} />
         )
     }
 

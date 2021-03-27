@@ -46,9 +46,6 @@ const Header: React.FC = () => {
                         <div className="ml-3 relative">
                             <div className="hidden sm:block sm:ml-6">
                                 <div className="flex space-x-1 h-16">
-                                    <div onClick={() => { history.push('/') }} className={`${(pathname === "/") ? "text-gray-800 border-blue-500" : "text-gray-600 border-white hover:border-blue-500 hover:border-opacity-70" } border-b-2 px-5 py-5 text-lg font-medium cursor-pointer`}>
-                                        <p>Accueil</p>
-                                    </div>
                                     <div onClick={() => { history.push('/catalogs') }} className={`${(pathname.includes("/catalogs")) ? "text-gray-800 border-blue-500" : "text-gray-600 border-white hover:border-blue-500 hover:border-opacity-70" } border-b-2 px-5 py-5 text-lg font-medium cursor-pointer`}>
                                         <p>Catalogue</p>
                                     </div>
@@ -78,9 +75,6 @@ const Header: React.FC = () => {
                         <div>
                             <div className={`sm:hidden bg-white shadow-lg`} id="mobile-menu">
                                 <div className="px-2 pb-2 space-y-1">
-                                    <div onClick={() => { history.push('/'); setNavbarOpen(false) }} className={`${(pathname === "/") ? "border-blue-500 bg-blue-500 bg-opacity-25 text-blue-500" : "text-gray-500 border-white hover:text-blue-500 hover:border-blue-500 hover:bg-blue-500 hover:bg-opacity-10" } border-l-4 text-lg px-3 py-2 font-medium cursor-pointer`}>
-                                        <p>Accueil</p>
-                                    </div>
                                     <div onClick={() => { history.push('/catalogs'); setNavbarOpen(false) }} className={`${(pathname.includes("/catalogs")) ? "border-blue-500 bg-blue-500 bg-opacity-25 text-blue-500" : "text-gray-500 border-white hover:text-blue-500 hover:border-blue-500 hover:bg-blue-500 hover:bg-opacity-10" } border-l-4 text-lg px-3 py-2 font-medium cursor-pointer`}>
                                         <p>Catalogue</p>
                                     </div>

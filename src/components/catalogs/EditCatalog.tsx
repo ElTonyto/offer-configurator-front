@@ -20,14 +20,13 @@ const EditCatalog: React.FC<PropsType> = ({ match }) => {
             oneCatalog(id).then(res => setValue("name", res.data.data.name))
             .catch(() => {
                 setRedirect(true)
-                notification("Le catalogue est introuvable", "error")
             })
         }
     }, [id, setValue])
 
     if (redirect) {
         return (
-            <Redirect to={{ pathname: "/" }} />
+            <Redirect to={{ pathname: "/not-found" }} />
         )
     }
 
