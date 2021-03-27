@@ -68,7 +68,7 @@ const EditCatalog: React.FC<PropsType> = ({ match }) => {
                 type="text"
                 name="name"
                 value=""
-                placeholder="Ex: High-Tech"
+                placeholder="Ex: Meuble"
                 register={register}
                 rules={{ required: true }}
                 error={errors.name}

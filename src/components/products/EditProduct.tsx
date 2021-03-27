@@ -304,7 +304,7 @@ const EditProduct: React.FC<PropsType> = ({ match }) => {
                         type="text"
                         name="name"
                         value=""
-                        placeholder="Ex: Meuble en bois - Bleu"
+                        placeholder="Ex: Meuble en bois"
                         register={register}
                         rules={{ required: true }}
                         error={errors.name}

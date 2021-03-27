@@ -182,7 +182,7 @@ const EditOffer: React.FC<PropsType> = ({ match }) => {
                         type="text"
                         name="submittedBy"
                         value=""
-                        placeholder="Ex: Lucas Consejo"
+                        placeholder="Ex: IKEA"
                         register={register}
                         rules={{ required: true }}
                         error={errors.submittedBy}
