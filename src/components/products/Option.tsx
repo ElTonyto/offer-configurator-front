@@ -13,8 +13,8 @@ const Option: React.FC<PropsType> = ({ index, register, size, errors, remove}) =
     const renderRemoveBtn = () => {
         if (index > 0 || size > 1) {
             return (
-                <div onClick={() => remove(index)}  className="cursor-pointer">
-                    <p>X</p>
+                <div onClick={() => remove(index)}  className="cursor-pointer mt-5 bg-red-500 px-2 py-0.5 rounded">
+                    <p className="text-white font-bold">X</p>
                 </div>
             )
         }
