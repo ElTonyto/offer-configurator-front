@@ -11,26 +11,13 @@ export const updateCatalog = (id: string, name: string) => axios.put(`catalogs/$
 export const allOffers = () => axios.get("offers")
 export const oneOffer = (id: string) => axios.get(`offers/${id}`)
 export const deleteOffer = (id: string) => axios.delete(`offers/${id}`)
-export const insertOffer = (productId: string, price: string, submittedBy: string, isActive: boolean, startAt: Date, endAt: Date) => axios.post("offers", {
-    productId,
-    price,
-    submittedBy,
-    isActive,
-    startAt,
-    endAt
-})
-export const updateOffer = (id: string, productId: string, price: string, submittedBy: string, isActive: boolean, startAt: Date, endAt: Date) => axios.put(`offers/${id}`, {
-    productId,
-    price,
-    submittedBy,
-    isActive,
-    startAt,
-    endAt
-})
+export const insertOffer = (data: { productId: string, price: string, submittedBy: string, isActive: boolean, startAt: Date, endAt: Date }) => axios.post("offers", data)
+export const updateOffer = (id: string, data: { productId: string, price: string, submittedBy: string, isActive: boolean, startAt: Date, endAt: Date }) => axios.put(`offers/${id}`, data)
 
 // Products
 export const allProducts = () => axios.get("products")
 export const allParentProducts = () => axios.get("products?isParent=true")
+export const allChildProducts = () => axios.get("products?isParent=false")
 export const oneProduct = (id: string) => axios.get(`products/${id}`)
 export const deleteProduct = (id: string) => axios.delete(`products/${id}`)
 export const insertProduct = (data: { name: string, parentId: string, description: string, catalogId: string, price: string, brand: string, remainingStock: number, options: Array<Object>, allOptions: Array<Object> }) => axios.post("products", data)
