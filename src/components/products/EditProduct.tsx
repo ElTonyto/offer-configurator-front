@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { useFieldArray, useForm } from "react-hook-form"
 import { Redirect } from 'react-router-dom'
-import { oneProduct, allProducts, allCatalogs, insertProduct, updateProduct } from '../../api/ApiRequest'
+import { oneProduct, allCatalogs, insertProduct, updateProduct, allParentProducts } from '../../api/ApiRequest';
 import CheckBox from "../../utils/input/CheckBox"
 import Datalist from "../../utils/input/Datalist"
 import FormInput from "../../utils/input/FormInput"
@@ -20,7 +20,7 @@ const EditProduct: React.FC<PropsType> = ({ match }) => {
     const [products, setProducts] = useState<Array<any>>([])
     const [selectedProduct, setSelectedProduct] = useState<any>(null)
     const [categories, setCategories] = useState<Array<any>>([])
-    const { register, handleSubmit, clearErrors, watch, getValues, setValue, control, errors, reset } = useForm({
+    const { register, handleSubmit, setValue, control, errors, reset } = useForm({
         defaultValues: {
             name: "",
             parentId: "",
@@ -57,7 +57,7 @@ const EditProduct: React.FC<PropsType> = ({ match }) => {
                 option: ""
             }]
         })
-    }, [])
+    }, [reset])
   
   
     useEffect(() => {
@@ -73,14 +73,26 @@ const EditProduct: React.FC<PropsType> = ({ match }) => {
                     setValue("remainingStock", res.data.data.remainingStock)
                     if (res.data.data.allOptions !== null) {
                         res.data.data.allOptions.forEach((item: any, index: number) => {
-                            setValue(`allOptions[${index}].name`, item.name)
-                            setValue(`allOptions[${index}].option`, item.option)
+                            if (index === 0) {
+                                setValue(`allOptions[${index}].name`, item.name)
+                                setValue(`allOptions[${index}].option`, item.option)
+                            } else {
+                                append({})
+                                setValue(`allOptions[${index}].name`, item.name)
+                                setValue(`allOptions[${index}].option`, item.option)
+                            }
                         })
                     }
                     if (res.data.data.options !== null) {
                         res.data.data.options.forEach((item: any, index: number) => {
-                            setValue(`allOptions[${index}].name`, item.name)
-                            setValue(`allOptions[${index}].option`, item.option)
+                            if (index === 0) {
+                                setValue(`allOptions[${index}].name`, item.name)
+                                setValue(`allOptions[${index}].option`, item.option)
+                            } else {
+                                append({})
+                                setValue(`allOptions[${index}].name`, item.name)
+                                setValue(`allOptions[${index}].option`, item.option)
+                            }
                         })
                     }
                     if (res.data.data.parentId !== null) {
@@ -99,11 +111,11 @@ const EditProduct: React.FC<PropsType> = ({ match }) => {
                 notification("Une erreur est survenue", "error")
             })
         }
-    }, [id, setValue])
+    }, [id, setValue, append])
 
     useEffect(() => {
         if (!isParent) {
-            allProducts()
+            allParentProducts()
             .then(res => {
                 setProducts(res.data.data)
             })
@@ -137,23 +149,35 @@ const EditProduct: React.FC<PropsType> = ({ match }) => {
         if (selectedProduct !== null) {
             if (selectedProduct.allOptions !== null) {
                 selectedProduct.allOptions.forEach((item: any, index: number) => {
-                    setValue(`allOptions[${index}].name`, item.name)
-                    setValue(`allOptions[${index}].option`, item.option)
+                    if (index === 0) {
+                        setValue(`allOptions[${index}].name`, item.name)
+                        setValue(`allOptions[${index}].option`, item.option)
+                    } else {
+                        append({})
+                        setValue(`allOptions[${index}].name`, item.name)
+                        setValue(`allOptions[${index}].option`, item.option)
+                    }
                 })
             }
             if (selectedProduct.options !== null) {
                 selectedProduct.options.forEach((item: any, index: number) => {
-                    setValue(`allOptions[${index}].name`, item.name)
-                    setValue(`allOptions[${index}].option`, item.option)
+                    if (index === 0) {
+                        setValue(`allOptions[${index}].name`, item.name)
+                        setValue(`allOptions[${index}].option`, item.option)
+                    } else {
+                        append({})
+                        setValue(`allOptions[${index}].name`, item.name)
+                        setValue(`allOptions[${index}].option`, item.option)
+                    }
                 })
             }
             setValue("name", selectedProduct.name)
-            setValue("parentId", selectedProduct.parentId)
             setValue("description", selectedProduct.description)
             setValue("catalogId", selectedProduct.catalogId)
             setValue("price", selectedProduct.price)
             setValue("brand", selectedProduct.brand)
-            setValue("remainingStock", selectedProduct.remainingStock)
+            setValue("remainingStock", selectedProduct.remainingStock);
+            (id !== undefined) && setValue("parentId", selectedProduct.parentId)
         } else {
             setValue("allOptions", [{ name: "", option: "" }])
             setValue("name", "")
@@ -163,7 +187,7 @@ const EditProduct: React.FC<PropsType> = ({ match }) => {
             setValue("brand", "")
             setValue("remainingStock", "")
         }
-    }, [selectedProduct])
+    }, [selectedProduct, setValue, id, append])
 
     if (redirect) {
         return (
@@ -180,6 +204,7 @@ const EditProduct: React.FC<PropsType> = ({ match }) => {
         } else {
             data.allOptions = null
             data.catalogId = selectedProduct.catalogId
+            data.brand = selectedProduct.brand
             delete data.isParent
         }
         if (id === undefined) {
@@ -198,6 +223,7 @@ const EditProduct: React.FC<PropsType> = ({ match }) => {
                         option: ""
                     }]
                 })
+                setSelectedProduct(null)
                 notification("Le produit a bien été ajouté", "success")
             })
             .catch((err) => {
@@ -216,7 +242,6 @@ const EditProduct: React.FC<PropsType> = ({ match }) => {
         } else {
             updateProduct(id, data)
             .then(() => {
-                setSelectedProduct(null)
                 notification("Le produit a bien été enregistré", "success")
             })
             .catch((err) => {
@@ -241,15 +266,17 @@ const EditProduct: React.FC<PropsType> = ({ match }) => {
                 <h2 className="text-xl my-2 font-medium">{id === undefined ? "Ajouter" : "Editer"} un produit</h2>
                 
                 {/* Parent or Child */}
-                <CheckBox
-                    label="Parent"
-                    name="isParent"
-                    checked={isParent}
-                    onChange={() => {setIsParent(!isParent); setSelectedProduct(null)}}
-                    register={register}
-                    rules={{ required: false }}
-                    error={""}
-                />
+                {id === undefined ? (
+                    <CheckBox
+                        label="Parent"
+                        name="isParent"
+                        checked={isParent}
+                        onChange={() => {setIsParent(!isParent); setSelectedProduct(null)}}
+                        register={register}
+                        rules={{ required: false }}
+                        error={""}
+                    />
+                ) : null }
             </div>
 
             {/* Parent  */}
@@ -368,17 +395,18 @@ const EditProduct: React.FC<PropsType> = ({ match }) => {
                                 <Option key={`${item.id}`} index={index} size={fields.length} register={register} errors={errors} remove={remove}/>
                             )
                         }
-                        if (selectedProduct.allOptions !== null) {
+                        if (selectedProduct.allOptions !== null || selectedProduct.options !== null) {
                             return (
                                 <SelectOption 
                                     key={`${item.id}`} 
-                                    item={selectedProduct.allOptions} 
+                                    item={(selectedProduct.allOptions !== null ? selectedProduct.allOptions : selectedProduct.options)} 
                                     index={index} 
                                     register={register} 
                                     errors={errors}
                                 />
                             )
                         }
+                        return null
                     })}
 
                     {isParent ? (

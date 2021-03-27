@@ -30,6 +30,7 @@ export const updateOffer = (id: string, productId: string, price: string, submit
 
 // Products
 export const allProducts = () => axios.get("products")
+export const allParentProducts = () => axios.get("products?isParent=true")
 export const oneProduct = (id: string) => axios.get(`products/${id}`)
 export const deleteProduct = (id: string) => axios.delete(`products/${id}`)
 export const insertProduct = (data: { name: string, parentId: string, description: string, catalogId: string, price: string, brand: string, remainingStock: number, options: Array<Object>, allOptions: Array<Object> }) => axios.post("products", data)
