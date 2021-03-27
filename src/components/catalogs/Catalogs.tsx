@@ -62,6 +62,13 @@ const Catalogs: React.FC = () => {
                         </tr>
                     </thead>
                     <tbody className="text-gray-600 text-sm font-light">
+                        {(catalogs.length === 0) && (
+                            <tr>
+                                <td className="py-3 px-6 text-left whitespace-nowrap">
+                                    <p>Aucun catalogue trouvé</p>
+                                </td>
+                            </tr>
+                        )}
                         {catalogs.map((item: any) => {
                             return (
                                 <tr key={item.id} className="border-b border-gray-200 hover:bg-gray-100">

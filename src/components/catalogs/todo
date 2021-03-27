@@ -1,4 +1,0 @@
-- Component pour récupérer tous les catalogs
-    - route: /catalogs
-    - Tableau
-    - Btn supprimer un catalog

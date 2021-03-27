@@ -1,4 +1,0 @@
-- Component pour récupérer tous les product
-    - route: /products
-    - Tableau
-    - Btn supprimer un product

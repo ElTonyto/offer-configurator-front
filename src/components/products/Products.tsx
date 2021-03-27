@@ -67,6 +67,13 @@ const Products: React.FC = () => {
                         </tr>
                     </thead>
                     <tbody className="text-gray-600 text-sm font-light">
+                        {(products.length === 0) && (
+                            <tr>
+                                <td className="py-3 px-6 text-left whitespace-nowrap">
+                                    <p>Aucun produit trouvé</p>
+                                </td>
+                            </tr>
+                        )}
                         {products.map((item: any, index: number) => {
                             return (
                                 <tr key={item.id} className="border-b border-gray-200 hover:bg-gray-100">
