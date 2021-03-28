@@ -58,9 +58,10 @@ const Products: React.FC = () => {
                 <table className="w-full table-auto">
                     <thead>
                         <tr className="bg-gray-100 text-gray-600 uppercase text-sm leading-normal">
+                            <th className="py-3 px-6 text-left">IMG</th>
                             <th className="py-3 px-6 text-left">Nom</th>
                             <th className="py-3 text-left">Description</th>
-                            <th className="py-3 text-center">Parent / Enfant</th>
+                            <th className="py-3 text-center">Status</th>
                             <th className="py-3 px-6 text-center">Stock</th>
                             <th className="py-3 px-6 text-center">Prix</th>
                             <th className="py-3 px-6 text-center">Actions</th>
@@ -77,6 +78,9 @@ const Products: React.FC = () => {
                         {products.map((item: any, index: number) => {
                             return (
                                 <tr key={item.id} className="border-b border-gray-200 hover:bg-gray-100">
+                                    <td className="py-3 px-6 text-left whitespace-nowrap">
+                                        <img className="w-12" src={item.img} alt={item.name} />
+                                    </td>
                                     <td className="py-3 px-6 text-left whitespace-nowrap">
                                         <Truncate width={180} ellipsis={<span>...</span>} className="font-bold">
                                             {item.name}

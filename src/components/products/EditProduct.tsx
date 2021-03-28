@@ -28,6 +28,7 @@ const EditProduct: React.FC<PropsType> = ({ match }) => {
             catalogId: "",
             price: "",
             brand: "",
+            img: "",
             remainingStock: "",
             allOptions: [{
                 name: "",
@@ -71,6 +72,7 @@ const EditProduct: React.FC<PropsType> = ({ match }) => {
                     setValue("price", res.data.data.price)
                     setValue("brand", res.data.data.brand)
                     setValue("remainingStock", res.data.data.remainingStock)
+                    setValue("img", res.data.data.img)
                     if (res.data.data.allOptions !== null) {
                         res.data.data.allOptions.forEach((item: any, index: number) => {
                             if (index === 0) {
@@ -174,6 +176,7 @@ const EditProduct: React.FC<PropsType> = ({ match }) => {
             setValue("catalogId", selectedProduct.catalogId)
             setValue("price", selectedProduct.price)
             setValue("brand", selectedProduct.brand)
+            setValue("img", selectedProduct.img)
             setValue("remainingStock", selectedProduct.remainingStock);
             (id !== undefined) && setValue("parentId", selectedProduct.parentId)
         } else {
@@ -183,6 +186,7 @@ const EditProduct: React.FC<PropsType> = ({ match }) => {
             setValue("catalogId","")
             setValue("price", "")
             setValue("brand", "")
+            setValue("img", "")
             setValue("remainingStock", "")
         }
     }, [selectedProduct, setValue, id, append])
@@ -216,6 +220,7 @@ const EditProduct: React.FC<PropsType> = ({ match }) => {
                     price: "",
                     brand: "",
                     remainingStock: "",
+                    img: "",
                     allOptions: [{
                         name: "",
                         option: ""
@@ -308,6 +313,20 @@ const EditProduct: React.FC<PropsType> = ({ match }) => {
                         register={register}
                         rules={{ required: true }}
                         error={errors.name}
+                    />
+
+                    {/* Img */}
+                    <FormInput
+                        classNameContainer="w-full mt-2"
+                        className="w-full bg-white my-0.5 p-2 text-base border border-gray-300 rounded-md font-medium outline-none"
+                        label="Url de l'image"
+                        type="text"
+                        name="img"
+                        value=""
+                        placeholder=""
+                        register={register}
+                        rules={{ required: true }}
+                        error={errors.img}
                     />
 
                     {/* Description */}
