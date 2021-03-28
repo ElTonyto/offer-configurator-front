@@ -195,6 +195,8 @@ const EditOffer: React.FC<PropsType> = ({ match }) => {
                         type="number"
                         name="price"
                         value=""
+                        min="0"
+                        step="0.01"
                         placeholder="Ex: 12"
                         register={register}
                         rules={{ required: false }}

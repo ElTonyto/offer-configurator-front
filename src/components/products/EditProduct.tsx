@@ -384,7 +384,8 @@ const EditProduct: React.FC<PropsType> = ({ match }) => {
                         value=""
                         placeholder="Ex: 12"
                         register={register}
-                        min={"0"}
+                        min="0"
+                        step="0.01"
                         rules={{ required: true }}
                         error={errors.price}
                     />
